@@ -22,18 +22,13 @@ RUN pip wheel uvloop cchardet aiodns brotlipy \
     && pip wheel -r requirements.txt
     
 #### FINAL IMAGE
-FROM python:3.8-slim AS base-image
+FROM hassioaddons/base-python AS base-image
 
-RUN set -x \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apk add --no-cache \
         curl \
         tzdata \
         ca-certificates \
-        openssl \
-    # cleanup
-    && rm -rf /tmp/* \
-    && rm -rf /var/lib/apt/lists/*
+        openssl
 
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#build-mounts-run---mount
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
