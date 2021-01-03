@@ -51,10 +51,11 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        curl \
-        tzdata \
         ca-certificates \
+        curl \
+        jq \
         openssl \
+        tzdata \
     # cleanup
     && rm -rf /tmp/* \
     && rm -rf /var/lib/apt/lists/*
@@ -71,6 +72,9 @@ COPY --from=s6downloader /s6downloader /
 # Install pip dependencies with built wheels
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
     pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
+
+# Install services
+COPY rootfs /
 
 LABEL \
     io.hass.name="Hass Emulated Hue" \

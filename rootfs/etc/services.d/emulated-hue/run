@@ -5,4 +5,4 @@
 # ==============================================================================
 
 bashio::log.info "Starting Emulated Hue..."
-exec python3 -m /app/emulated_hue
+exec python3 -u /app/emulated_hue/__init__.py
