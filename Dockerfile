@@ -1,12 +1,11 @@
-ARG HASS_ARCH
+ARG HASS_ARCH=amd64
 
 FROM python:3.8-slim as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 
-RUN set -x \
-    # Install buildtime packages
-    && apt-get update \
+# Install buildtime packages
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
         ca-certificates \
@@ -50,8 +49,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     S6_KEEP_ENV=1 \
     DEBIAN_FRONTEND="noninteractive"
 
-RUN set -x \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
         tzdata \
