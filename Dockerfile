@@ -1,4 +1,4 @@
-FROM hassioaddons/base-python as wheels-builder
+FROM alpine:3.10 as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 
@@ -11,7 +11,9 @@ RUN apk add --no-cache \
         python3-dev \
         openssl-dev \
         git \
-        openssl
+        python3 \
+        openssl \
+        supervisor
 
 WORKDIR /wheels
 RUN git clone https://github.com/hass-emulated-hue/core.git /app \
