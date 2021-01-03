@@ -4,7 +4,8 @@ ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 
 RUN set -x \
     # Install buildtime packages
-    && apt-get update && apt-get install -y --no-install-recommends \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
         curl \
         ca-certificates \
         build-essential \
