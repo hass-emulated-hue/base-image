@@ -1,3 +1,5 @@
+ARG HASS_ARCH
+
 FROM python:3.8-slim as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
@@ -39,3 +41,9 @@ RUN set -x \
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#build-mounts-run---mount
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
     pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
+
+LABEL \
+    io.hass.name="Hass Emulated Hue" \
+    io.hass.description="Hue Emulation for Home Assistant" \
+    io.hass.arch="${HASS_ARCH}" \
+    io.hass.type="addon"
