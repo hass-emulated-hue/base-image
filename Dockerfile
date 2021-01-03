@@ -2,9 +2,8 @@ FROM hassioaddons/base-python as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 
-RUN set -x \
-    # Install buildtime packages
-    && apk add --no-cache --virtual .build-dependencies \
+# Install buildtime packages
+RUN apk add --no-cache \
         build-base \
         cmake \
         libuv-dev \
