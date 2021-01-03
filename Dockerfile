@@ -14,7 +14,8 @@ RUN apk add --no-cache \
         python3 \
         openssl \
         supervisor \
-        gcc
+        gcc \
+        g++
 
 WORKDIR /wheels
 RUN git clone https://github.com/hass-emulated-hue/core.git /app \
