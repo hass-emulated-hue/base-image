@@ -12,21 +12,21 @@ jobs:
     strategy:
       matrix:
         include:
-#          - arch: linux/386
-#            arch_friendly: i386
-#            hass_arch: i386
+          - arch: linux/386
+            arch_friendly: i386
+            hass_arch: i386
           - arch: linux/amd64
             arch_friendly: amd64
             hass_arch: amd64
-#          - arch: linux/arm/v6
-#            arch_friendly: armv6
-#            hass_arch: armel
-#          - arch: linux/arm/v7
-#            arch_friendly: armv7
-#            hass_arch: armhf
-#          - arch: linux/arm64
-#            arch_friendly: arm64
-#            hass_arch: aarch64
+          - arch: linux/arm/v6
+            arch_friendly: armv6
+            hass_arch: armel
+          - arch: linux/arm/v7
+            arch_friendly: armv7
+            hass_arch: armhf
+          - arch: linux/arm64
+            arch_friendly: arm64
+            hass_arch: aarch64
 
     steps:
       - name: Checkout

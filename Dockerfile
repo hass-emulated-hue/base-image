@@ -24,7 +24,7 @@ RUN pip wheel uvloop cchardet aiodns brotlipy \
     && pip wheel -r requirements.txt
 
 # Download and extract s6 overlay
-FROM busybox:latest as s6downloader
+FROM alpine:latest as s6downloader
 WORKDIR /s6downloader
 
 RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/repos/just-containers/s6-overlay/releases/latest | awk '/tag_name/{print $4;exit}' FS='[""]') \
@@ -32,7 +32,7 @@ RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/r
     && tar xfz s6-overlay.tar.gz \
     && rm s6-overlay.tar.gz
 
-FROM busybox:latest as bashiodownloader
+FROM alpine:latest as bashiodownloader
 WORKDIR /bashio
 
 RUN wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/v0.9.0.tar.gz" \
