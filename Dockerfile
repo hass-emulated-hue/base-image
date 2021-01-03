@@ -17,7 +17,8 @@ RUN apk add --no-cache \
 
 WORKDIR /wheels
 RUN git clone https://github.com/hass-emulated-hue/core.git /app \
-    && cp /app/requirements.txt requirements.txt
+    && cp /app/requirements.txt requirements.txt \
+    && pip3 install wheel
 
 # build python wheels
 RUN pip3 wheel uvloop cchardet aiodns brotlipy \
