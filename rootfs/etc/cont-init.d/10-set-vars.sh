@@ -8,12 +8,16 @@ if bashio::config.has_value 'data'; then
     export DATA_DIR=$(bashio::config 'data')
 fi
 
-if bashio::config.has_value 'url'; then
-    export HASS_URL=$(bashio::config 'url')
+if bashio::config.has_value 'lights'; then
+    export LIGHTS=$(bashio::config 'lights')
 fi
 
 if bashio::config.has_value 'token'; then
     export HASS_TOKEN=$(bashio::config 'token')
+fi
+
+if bashio::config.has_value 'url'; then
+    export HASS_URL=$(bashio::config 'url')
 fi
 
 if bashio::config.has_value 'verbose'; then
