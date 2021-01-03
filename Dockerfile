@@ -20,8 +20,8 @@ RUN git clone https://github.com/hass-emulated-hue/core.git /app \
     && cp /app/requirements.txt requirements.txt
 
 # build python wheels
-RUN pip wheel uvloop cchardet aiodns brotlipy \
-    && pip wheel -r requirements.txt
+RUN pip3 wheel uvloop cchardet aiodns brotlipy \
+    && pip3 wheel -r requirements.txt
     
 #### FINAL IMAGE
 FROM hassioaddons/base-python AS base-image
