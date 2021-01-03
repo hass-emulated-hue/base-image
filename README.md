@@ -1,0 +1,1 @@
+emulated-hue-base-image
