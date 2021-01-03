@@ -1,17 +1,18 @@
-FROM python:3.8-slim as wheels-builder
+FROM hassioaddons/base-python as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 
 RUN set -x \
     # Install buildtime packages
-    && apt-get update && apt-get install -y --no-install-recommends \
-        curl \
-        ca-certificates \
-        build-essential \
-        gcc \
-        git \
+    && apk add --no-cache --virtual .build-dependencies \
+        build-base \
+        cmake \
+        libuv-dev \
         libffi-dev \
-        libssl-dev
+        python3-dev \
+        openssl-dev \
+        git \
+        openssl
 
 WORKDIR /wheels
 RUN git clone https://github.com/hass-emulated-hue/core.git /app \
