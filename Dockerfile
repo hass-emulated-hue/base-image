@@ -14,6 +14,7 @@ RUN apk add --no-cache \
         python3 \
         openssl \
         supervisor \
+        libc-dev \
         gcc \
         g++
 
