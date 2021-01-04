@@ -94,9 +94,6 @@ COPY --from=s6downloader /s6downloader /
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
     pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
 
-# Install services
-COPY rootfs /
-
 LABEL \
     io.hass.name="Hass Emulated Hue" \
     io.hass.description="Hue Emulation for Home Assistant" \

@@ -1,8 +1,0 @@
-#!/usr/bin/with-contenv bashio
-# ==============================================================================
-# Community Hass.io Add-ons: Emulated Hue
-# Runs Emulated Hue
-# ==============================================================================
-
-bashio::log.info "Starting Emulated Hue..."
-exec python3 -m emulated_hue
