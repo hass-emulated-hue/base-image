@@ -67,7 +67,6 @@ FROM python:3.8-slim AS base-image
 ARG HASS_ARCH
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
-    S6_KEEP_ENV=1 \
     DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update \
