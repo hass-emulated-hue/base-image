@@ -7,7 +7,7 @@ ARG S6_ARCH=amd64
 # Build Wheels                                                      #
 #                                                                   #
 #####################################################################
-FROM python:3.8.7-slim as wheels-builder
+FROM python:3.8-slim as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 
