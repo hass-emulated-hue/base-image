@@ -1,6 +1,11 @@
 # syntax=docker/dockerfile:experimental
 ARG HASS_ARCH=amd64
 
+#####################################################################
+#                                                                   #
+# Build Wheels                                                      #
+#                                                                   #
+#####################################################################
 FROM python:3.8-slim as wheels-builder
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
@@ -24,7 +29,11 @@ RUN git clone https://github.com/hass-emulated-hue/core.git /app \
 RUN pip wheel uvloop cchardet aiodns brotlipy \
     && pip wheel -r requirements.txt
 
-# Download and extract s6 overlay
+#####################################################################
+#                                                                   #
+# Download and extract s6 overlay                                   #
+#                                                                   #
+#####################################################################
 FROM alpine:latest as s6downloader
 WORKDIR /s6downloader
 
@@ -33,6 +42,11 @@ RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/r
     && tar xfz s6-overlay.tar.gz \
     && rm s6-overlay.tar.gz
 
+#####################################################################
+#                                                                   #
+# Download and extract bashio                                       #
+#                                                                   #
+#####################################################################
 FROM alpine:latest as bashiodownloader
 WORKDIR /bashio
 
@@ -43,7 +57,11 @@ RUN wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/
         --strip 1 -C /tmp/bashio \
     && mv /tmp/bashio/lib .
 
-#### FINAL IMAGE
+#####################################################################
+#                                                                   #
+# Build Base Image                                                  #
+#                                                                   #
+#####################################################################
 FROM python:3.8-slim AS base-image
 # Required to presist build arg
 ARG HASS_ARCH
@@ -84,5 +102,7 @@ LABEL \
     io.hass.description="Hue Emulation for Home Assistant" \
     io.hass.arch="${HASS_ARCH}" \
     io.hass.type="addon"
+
+WORKDIR /app
 
 CMD ["/init"]
