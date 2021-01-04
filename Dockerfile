@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 ARG HASS_ARCH=amd64
 
 FROM python:3.8-slim as wheels-builder
@@ -44,6 +45,8 @@ RUN wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/
 
 #### FINAL IMAGE
 FROM python:3.8-slim AS base-image
+# Required to presist build arg
+ARG HASS_ARCH
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     S6_KEEP_ENV=1 \
