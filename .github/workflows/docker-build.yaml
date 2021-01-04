@@ -18,10 +18,10 @@ jobs:
             hass_arch: amd64
           - arch: linux/arm/v6
             arch_friendly: armv6
-            hass_arch: armel
+            hass_arch: armv6
           - arch: linux/arm/v7
             arch_friendly: armv7
-            hass_arch: armhf
+            hass_arch: armv7
           - arch: linux/arm64
             arch_friendly: arm64
             hass_arch: aarch64
