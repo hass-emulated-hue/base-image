@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:experimental
 ARG HASS_ARCH=amd64
+ARG S6_ARCH=amd64
 
 #####################################################################
 #                                                                   #
@@ -35,10 +36,12 @@ RUN pip wheel uvloop cchardet aiodns brotlipy \
 #                                                                   #
 #####################################################################
 FROM alpine:latest as s6downloader
+# Required to presist build arg
+ARG S6_ARCH
 WORKDIR /s6downloader
 
 RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/repos/just-containers/s6-overlay/releases/latest | awk '/tag_name/{print $4;exit}' FS='[""]') \
-    && wget -O s6-overlay.tar.gz "https://github.com/just-containers/s6-overlay/releases/download/${OVERLAY_VERSION}/s6-overlay-amd64.tar.gz" \
+    && wget -O s6-overlay.tar.gz "https://github.com/just-containers/s6-overlay/releases/download/${OVERLAY_VERSION}/s6-overlay-${S6_ARCH}.tar.gz" \
     && tar xfz s6-overlay.tar.gz \
     && rm s6-overlay.tar.gz
 
