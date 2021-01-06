@@ -36,7 +36,7 @@ RUN pip wheel uvloop cchardet aiodns brotlipy \
 #                                                                   #
 #####################################################################
 FROM alpine:latest as s6downloader
-# Required to presist build arg
+# Required to persist build arg
 ARG S6_ARCH
 WORKDIR /s6downloader
 
@@ -65,7 +65,7 @@ RUN wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/
 #                                                                   #
 #####################################################################
 FROM python:3.8-slim AS base-image
-# Required to presist build arg
+# Required to persist build arg
 ARG HASS_ARCH
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
