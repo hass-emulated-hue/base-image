@@ -32,6 +32,22 @@ RUN pip wheel uvloop cchardet aiodns brotlipy \
 
 #####################################################################
 #                                                                   #
+# Download and extract s6 overlay                                   #
+#                                                                   #
+#####################################################################
+FROM alpine:latest as s6downloader
+# Required to persist build arg
+ARG S6_ARCH
+WORKDIR /s6downloader
+
+RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/repos/just-containers/s6-overlay/releases/latest | awk '/tag_name/{print $4;exit}' FS='[""]') \
+    && wget -O /tmp/s6-overlay.tar.gz "https://github.com/just-containers/s6-overlay/releases/download/${OVERLAY_VERSION}/s6-overlay-${S6_ARCH}.tar.gz" \
+    && mkdir -p /tmp/s6 \
+    && tar zxvf /tmp/s6-overlay.tar.gz -C /tmp/s6 \
+    && mv /tmp/s6/* .
+
+#####################################################################
+#                                                                   #
 # Download and extract bashio                                       #
 #                                                                   #
 #####################################################################
@@ -71,6 +87,9 @@ RUN --mount=type=bind,target=/bashio,source=/bashio,from=bashiodownloader,rw \
     mv /bashio/lib /usr/lib/bashio \
     && ln -s /usr/lib/bashio/bashio /usr/bin/bashio
 
+# Install s6 overlay
+COPY --from=s6downloader /s6downloader /
+
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#build-mounts-run---mount
 # Install pip dependencies with built wheels
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
@@ -83,3 +102,5 @@ LABEL \
     io.hass.type="addon"
 
 WORKDIR /app
+
+CMD ["/init"]
