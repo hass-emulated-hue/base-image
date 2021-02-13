@@ -27,7 +27,7 @@ RUN apt-get update \
 
 RUN curl -o rustup-init https://static.rust-lang.org/rustup/dist/${RUST_ARCH}/rustup-init \
     && chmod +x rustup-init \
-    && ./rustup-init -y --no-modify-path --profile minimal --default-host ${RUST_ARCH}
+    && ./rustup-init -y --no-modify-path --default-toolchain 1.49.0 --profile minimal --default-host ${RUST_ARCH}
 
 WORKDIR /wheels
 RUN git clone https://github.com/hass-emulated-hue/core.git /app \
