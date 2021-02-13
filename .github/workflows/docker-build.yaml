@@ -71,7 +71,7 @@ jobs:
           docker build \
             --build-arg HASS_ARCH=${{ matrix.hass_arch }} \
             --build-arg S6_ARCH=${{ matrix.s6_arch }} \
-#            --build-arg RUST_ARCH=${{ matrix.rust_arch }} \
+            # --build-arg RUST_ARCH=${{ matrix.rust_arch }} \
             --tag baseimage:ci \
             --platform ${{ matrix.arch }} \
             --progress plain \
