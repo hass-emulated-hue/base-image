@@ -16,27 +16,27 @@ jobs:
             arch_friendly: i386
             hass_arch: i386
             s6_arch: x86
-            rust_arch: i686-unknown-linux-gnu
+            # rust_arch: i686-unknown-linux-gnu
           - arch: linux/amd64
             arch_friendly: amd64
             hass_arch: amd64
             s6_arch: amd64
-            rust_arch: x86_64-unknown-linux-gnu
+            # rust_arch: x86_64-unknown-linux-gnu
           - arch: linux/arm/v6
             arch_friendly: armv6
             hass_arch: armv6
             s6_arch: arm
-            rust_arch: arm-unknown-linux-gnueabi
+            # rust_arch: arm-unknown-linux-gnueabi
           - arch: linux/arm/v7
             arch_friendly: armv7
             hass_arch: armv7
             s6_arch: armhf
-            rust_arch: armv7-unknown-linux-gnueabihf
+            # rust_arch: armv7-unknown-linux-gnueabihf
           - arch: linux/arm64
             arch_friendly: arm64
             hass_arch: aarch64
             s6_arch: aarch64
-            rust_arch: aarch64-unknown-linux-gnu
+            # rust_arch: aarch64-unknown-linux-gnu
 
     steps:
       - name: Checkout
@@ -51,27 +51,27 @@ jobs:
           install: true
 
       # https://github.com/crazy-max/ghaction-docker-buildx/issues/172
-      - name: Hack Docker FS to Build cryptography on armv6/armv7
-        run: |
-          df -h
-          sudo swapon --show
-          sudo dd if=/dev/zero of=/swapfile1 bs=1M count=6K 
-          sudo chmod 600 /swapfile1
-          sudo mkswap /swapfile1
-          sudo swapon /swapfile1
-          sudo swapon --show
-          sudo free -h
-          sudo systemctl stop docker
-          sudo mount -t tmpfs -o size=9G tmpfs /var/lib/docker
-          df -h
-          sudo systemctl start docker
+      # - name: Hack Docker FS to Build cryptography on armv6/armv7
+      #   run: |
+      #     df -h
+      #     sudo swapon --show
+      #     sudo dd if=/dev/zero of=/swapfile1 bs=1M count=6K 
+      #     sudo chmod 600 /swapfile1
+      #     sudo mkswap /swapfile1
+      #     sudo swapon /swapfile1
+      #     sudo swapon --show
+      #     sudo free -h
+      #     sudo systemctl stop docker
+      #     sudo mount -t tmpfs -o size=9G tmpfs /var/lib/docker
+      #     df -h
+      #     sudo systemctl start docker
 
       - name: Build
         run: |
           docker build \
             --build-arg HASS_ARCH=${{ matrix.hass_arch }} \
             --build-arg S6_ARCH=${{ matrix.s6_arch }} \
-            --build-arg RUST_ARCH=${{ matrix.rust_arch }} \
+#            --build-arg RUST_ARCH=${{ matrix.rust_arch }} \
             --tag baseimage:ci \
             --platform ${{ matrix.arch }} \
             --progress plain \
