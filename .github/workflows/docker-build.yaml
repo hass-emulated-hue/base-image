@@ -4,8 +4,6 @@ on:
   push:
   repository_dispatch:
     types: build_image
-  schedule:
-    - cron: '0 0 * * *'
 
 jobs:
   build:
