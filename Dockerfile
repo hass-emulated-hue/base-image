@@ -25,15 +25,18 @@ RUN set -x \
         libffi-dev \
         libssl-dev
 
-RUN curl -o rustup-init https://static.rust-lang.org/rustup/dist/${RUST_ARCH}/rustup-init \
+RUN set -x \
+    && curl -o rustup-init https://static.rust-lang.org/rustup/dist/${RUST_ARCH}/rustup-init \
     && chmod +x rustup-init \
     && ./rustup-init -y --no-modify-path --profile minimal --default-host ${RUST_ARCH}
 
 WORKDIR /wheels
-RUN curl -o requirements.txt https://raw.githubusercontent.com/hass-emulated-hue/core/master/requirements.txt
+RUN set -x \
+    && curl -o requirements.txt https://raw.githubusercontent.com/hass-emulated-hue/core/master/requirements.txt
 
 # build python wheels
-RUN pip wheel -r requirements.txt
+RUN set -x \
+    && pip wheel -r requirements.txt
 
 #####################################################################
 #                                                                   #
@@ -92,7 +95,8 @@ RUN set -x \
 
 # Install bashio
 RUN --mount=type=bind,target=/bashio,source=/bashio,from=bashiodownloader,rw \
-    mv /bashio/lib /usr/lib/bashio \
+    set -x \
+    && mv /bashio/lib /usr/lib/bashio \
     && ln -s /usr/lib/bashio/bashio /usr/bin/bashio
 
 # Install s6 overlay
@@ -101,7 +105,8 @@ COPY --from=s6downloader /s6downloader /
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#build-mounts-run---mount
 # Install pip dependencies with built wheels
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
-    pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
+    set -x \
+    && pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
 
 LABEL \
     io.hass.name="Hass Emulated Hue" \
