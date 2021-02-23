@@ -54,6 +54,7 @@ jobs:
       - name: Hack Docker FS to Build cryptography on armv6/armv7
         if: ${{ matrix.arch_friendly == 'armv6' || matrix.arch_friendly == 'armv7' }}
         run: |
+          set -x
           df -h
           sudo swapon --show
           sudo dd if=/dev/zero of=/swapfile1 bs=1M count=6K

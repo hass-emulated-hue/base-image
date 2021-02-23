@@ -15,26 +15,28 @@ ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
 ENV PATH="${PATH}:/root/.cargo/bin"
 
 # Install buildtime packages
-RUN apt-get update \
+RUN set -x \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
         curl \
         gcc \
-        git \
         libffi-dev \
         libssl-dev
 
-RUN curl -o rustup-init https://static.rust-lang.org/rustup/dist/${RUST_ARCH}/rustup-init \
+RUN set -x \
+    && curl -o rustup-init https://static.rust-lang.org/rustup/dist/${RUST_ARCH}/rustup-init \
     && chmod +x rustup-init \
     && ./rustup-init -y --no-modify-path --profile minimal --default-host ${RUST_ARCH}
 
 WORKDIR /wheels
-RUN git clone https://github.com/hass-emulated-hue/core.git /app \
-    && cp /app/requirements.txt requirements.txt
+RUN set -x \
+    && curl -o requirements.txt https://raw.githubusercontent.com/hass-emulated-hue/core/master/requirements.txt
 
 # build python wheels
-RUN pip wheel -r requirements.txt
+RUN set -x \
+    && pip wheel -r requirements.txt
 
 #####################################################################
 #                                                                   #
@@ -46,7 +48,8 @@ FROM alpine:latest as s6downloader
 ARG S6_ARCH
 WORKDIR /s6downloader
 
-RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/repos/just-containers/s6-overlay/releases/latest | awk '/tag_name/{print $4;exit}' FS='[""]') \
+RUN set -x \
+    && OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/repos/just-containers/s6-overlay/releases/latest | awk '/tag_name/{print $4;exit}' FS='[""]') \
     && wget -O /tmp/s6-overlay.tar.gz "https://github.com/just-containers/s6-overlay/releases/download/${OVERLAY_VERSION}/s6-overlay-${S6_ARCH}.tar.gz" \
     && mkdir -p /tmp/s6 \
     && tar zxvf /tmp/s6-overlay.tar.gz -C /tmp/s6 \
@@ -60,7 +63,8 @@ RUN OVERLAY_VERSION=$(wget --no-check-certificate -qO - https://api.github.com/r
 FROM alpine:latest as bashiodownloader
 WORKDIR /bashio
 
-RUN wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/v0.9.0.tar.gz" \
+RUN set -x \
+    && wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/v0.9.0.tar.gz" \
     && mkdir -p /tmp/bashio \
     && tar zxvf /tmp/bashio.tar.gz --strip 1 -C /tmp/bashio \
     && mv /tmp/bashio/lib .
@@ -77,7 +81,8 @@ ARG HASS_ARCH
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     DEBIAN_FRONTEND="noninteractive"
 
-RUN apt-get update \
+RUN set -x \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
@@ -90,7 +95,8 @@ RUN apt-get update \
 
 # Install bashio
 RUN --mount=type=bind,target=/bashio,source=/bashio,from=bashiodownloader,rw \
-    mv /bashio/lib /usr/lib/bashio \
+    set -x \
+    && mv /bashio/lib /usr/lib/bashio \
     && ln -s /usr/lib/bashio/bashio /usr/bin/bashio
 
 # Install s6 overlay
@@ -99,7 +105,8 @@ COPY --from=s6downloader /s6downloader /
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#build-mounts-run---mount
 # Install pip dependencies with built wheels
 RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
-    pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
+    set -x \
+    && pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
 
 LABEL \
     io.hass.name="Hass Emulated Hue" \
