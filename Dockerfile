@@ -22,6 +22,7 @@ RUN set -x \
         ca-certificates \
         curl \
         gcc \
+        git \
         libffi-dev \
         libssl-dev
 
