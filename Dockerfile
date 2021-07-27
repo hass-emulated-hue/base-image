@@ -64,7 +64,7 @@ FROM alpine:latest as bashiodownloader
 WORKDIR /bashio
 
 RUN set -x \
-    && wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/v0.9.0.tar.gz" \
+    && wget -O /tmp/bashio.tar.gz "https://github.com/hassio-addons/bashio/archive/v0.13.1.tar.gz" \
     && mkdir -p /tmp/bashio \
     && tar zxvf /tmp/bashio.tar.gz --strip 1 -C /tmp/bashio \
     && mv /tmp/bashio/lib .
