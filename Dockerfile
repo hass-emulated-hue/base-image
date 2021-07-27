@@ -94,9 +94,9 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/*
 
 # Install bashio
-RUN --mount=type=bind,target=/bashio,source=/bashio,from=bashiodownloader,rw \
+RUN --mount=type=bind,target=/tmp/bashio,source=/bashio,from=bashiodownloader,rw \
     set -x \
-    && mv /bashio/lib /usr/lib/bashio \
+    && mv /tmp/bashio/lib /usr/lib/bashio \
     && ln -s /usr/lib/bashio/bashio /usr/bin/bashio
 
 # Install s6 overlay
@@ -104,9 +104,9 @@ COPY --from=s6downloader /s6downloader /
 
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/syntax.md#build-mounts-run---mount
 # Install pip dependencies with built wheels
-RUN --mount=type=bind,target=/wheels,source=/wheels,from=wheels-builder,rw \
+RUN --mount=type=bind,target=/tmp/wheels,source=/wheels,from=wheels-builder,rw \
     set -x \
-    && pip install --no-cache-dir -f /wheels -r /wheels/requirements.txt
+    && pip install --no-cache-dir -f /tmp/wheels -r /tmp/wheels/requirements.txt
 
 LABEL \
     io.hass.name="Hass Emulated Hue" \
