@@ -87,6 +87,7 @@ RUN set -x \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        git \
         jq \
         openssl \
         tzdata \
