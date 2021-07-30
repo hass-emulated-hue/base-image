@@ -8,7 +8,7 @@ ARG RUST_ARCH=x86_64-unknown-linux-gnu
 # Build Wheels                                                      #
 #                                                                   #
 #####################################################################
-FROM python:3.8-slim as wheels-builder
+FROM python:3.9-slim as wheels-builder
 ARG RUST_ARCH
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
