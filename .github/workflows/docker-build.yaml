@@ -16,27 +16,22 @@ jobs:
             arch_friendly: i386
             hass_arch: i386
             s6_arch: x86
-            rust_arch: i686-unknown-linux-gnu
           - arch: linux/amd64
             arch_friendly: amd64
             hass_arch: amd64
             s6_arch: amd64
-            rust_arch: x86_64-unknown-linux-gnu
           - arch: linux/arm/v6
             arch_friendly: armv6
             hass_arch: armv6
             s6_arch: arm
-            rust_arch: arm-unknown-linux-gnueabi
           - arch: linux/arm/v7
             arch_friendly: armv7
             hass_arch: armv7
             s6_arch: armhf
-            rust_arch: armv7-unknown-linux-gnueabihf
           - arch: linux/arm64
             arch_friendly: arm64
             hass_arch: aarch64
             s6_arch: aarch64
-            rust_arch: aarch64-unknown-linux-gnu
 
     steps:
       - name: Checkout
@@ -56,7 +51,6 @@ jobs:
           docker build \
             --build-arg HASS_ARCH=${{ matrix.hass_arch }} \
             --build-arg S6_ARCH=${{ matrix.s6_arch }} \
-            --build-arg RUST_ARCH=${{ matrix.rust_arch }} \
             --tag baseimage:ci \
             --platform ${{ matrix.arch }} \
             --progress plain \

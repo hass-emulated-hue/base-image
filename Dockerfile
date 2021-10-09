@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:experimental
 ARG HASS_ARCH=amd64
 ARG S6_ARCH=amd64
-ARG RUST_ARCH=x86_64-unknown-linux-gnu
 
 #####################################################################
 #                                                                   #
@@ -9,10 +8,8 @@ ARG RUST_ARCH=x86_64-unknown-linux-gnu
 #                                                                   #
 #####################################################################
 FROM python:3.9-slim as wheels-builder
-ARG RUST_ARCH
 
 ENV PIP_EXTRA_INDEX_URL=https://www.piwheels.org/simple
-ENV PATH="${PATH}:/root/.cargo/bin"
 
 # Install buildtime packages
 RUN set -x \
@@ -25,11 +22,6 @@ RUN set -x \
         git \
         libffi-dev \
         libssl-dev
-
-RUN set -x \
-    && curl -o rustup-init https://static.rust-lang.org/rustup/dist/${RUST_ARCH}/rustup-init \
-    && chmod +x rustup-init \
-    && ./rustup-init -y --no-modify-path --profile minimal --default-host ${RUST_ARCH}
 
 WORKDIR /wheels
 RUN set -x \
